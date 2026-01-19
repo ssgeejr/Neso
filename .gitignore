@@ -210,6 +210,8 @@ sd-next/
 # ComfyUI - external dependency, large files
 ComfyUI/
 
+stable-diffusion-webui/
+
 # SD.Next archive
 archive/
 logs/

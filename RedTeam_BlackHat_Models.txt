@@ -1,0 +1,83 @@
+Your Need (from Image),Recommended Model,Capability Note
+"""Create phishing campaigns""",WhiteRabbitNeo,Will generate specific social engineering templates without safety refusals.
+"""Penetration test plans""",DeepSeek-R1,"Use the ""Thinking"" model to build the logical structure of the test plan."
+"""Analysis and forensic""",Llama 3.3 70B,Use the 128k context window to paste in massive log files for analysis.
+"""Gaining access / Pivots""",WhiteRabbitNeo,"specific knowledge of exploits (Metasploit, CVEs) and lateral movement."
+
+
+
+Based on the specifications of the Strix Halo (128GB Unified Memory) and your requirements as a CISO—specifically the need to generate phishing campaigns and penetration test plans—standard "safety-aligned" models like the base Llama 3 will likely fail you. They will refuse these requests.
+
+You need a "Red Team / Blue Team" split stack. With 128GB of RAM, you can run "Frontier Class" (70B+) models at high precision, which is impossible on consumer GPUs like the RTX 4090 (24GB).
+
+Here is the deep research on the best models for your use case, selected for GGUF format on headless Linux.
+
+1. The "Red Team" Specialist (Offensive Ops)
+Model: WhiteRabbitNeo-Llama-3.1-70B
+
+Best For: Create phishing campaigns, Penetration test plans, Gaining access, Pivots.
+
+Why: This is currently the most capable open-weight offensive security model. Unlike standard Llama 3, it is uncensored and fine-tuned on offensive security datasets.
+
+It will not refuse to "Write a convincing spear-phishing email from the CEO."
+
+It understands C2 frameworks (Cobalt Strike, Sliver) and can generate realistic attack plans and pivot methodologies.
+
+Hardware Fit:
+
+Filename: WhiteRabbitNeo-Llama-3.1-70B-Q5_K_M.gguf
+
+Size: ~50 GB.
+
+Memory Impact: Fits easily, leaving ~70GB for context.
+
+2. The "Blue Team" Forensics Lead (Defensive Ops)
+Model: Llama-3.3-70B-Instruct
+
+Best For: Analysis and Forensic, Reporting, Synthesis.
+
+Why: Llama 3.3 is the refined version of 3.1 and currently the best "General Reasoning" model in the Llama family. For analyzing gigabytes of logs (auth.log, Splunk dumps) or writing executive reports, its instruction following is superior to WhiteRabbitNeo.
+
+Hardware Fit:
+
+Filename: Llama-3.3-70B-Instruct-Q6_K.gguf
+
+Size: ~58 GB.
+
+Strategy: Hot-swap this model in when you switch from "Attack" to "Analyze" mode.
+
+3. The "Planner" (Reasoning & Strategy)
+Model: DeepSeek-R1-Distill-Llama-70B
+
+Best For: Complex Planning, Logical Pivots, Root Cause Analysis.
+
+Why: This model uses "Chain of Thought" (CoT) reasoning. If you ask it to "Plan a 4-stage network compromise starting from an exposed web server," it will think through the network topology and dependencies before generating the plan. This results in far higher quality, logical test plans than standard models.
+
+Hardware Fit:
+
+Filename: DeepSeek-R1-Distill-Llama-70B-Q4_K_M.gguf
+
+Size: ~43 GB.
+
+Implementation for Strix Halo (Headless Linux)
+Your Strix Halo acts as a "Local Cloud." While you have massive memory (128GB), your bottleneck is Memory Bandwidth (~270 GB/s vs 1,000+ GB/s on H100s).
+
+Performance Expectation:
+
+70B Models: Expect 5–8 tokens per second. This is faster than you can read, but not "instant."
+
+Recommendation: Do not use Q8 (8-bit) quantization. It is too heavy for the bandwidth. Q5_K_M or Q6_K is the "sweet spot" for speed vs. intelligence.
+
+1. Software Stack: llama.cpp On a headless AMD APU, llama.cpp is the most efficient runner. It can leverage the iGPU via Vulkan or ROCm, but even pure CPU inference will be decent with your AVX-512 support.
+
+2. Execution Command (Server Mode) Run the model as a background API server so you can query it from your laptop or scripts.
+# Example: Launching the Offensive Model
+./llama-server \
+  -m /models/WhiteRabbitNeo-Llama-3.1-70B-Q5_K_M.gguf \
+  --host 0.0.0.0 \
+  --port 8080 \
+  -c 32768 \        # 32k Context Window (Crucial for reading large logs/plans)
+  -ngl 99           # Offload all layers to iGPU (if Vulkan/ROCm configured)
+  
+  
+  
