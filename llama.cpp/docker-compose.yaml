@@ -1,0 +1,12 @@
+services:
+  webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: llamacpp.webui
+    ports:
+      - "88:8080"
+    environment:
+        OPENAI_API_BASE_URL: http://host.docker.internal:8080/v1
+        OPENAI_API_KEY: sk-local
+    volumes:
+      - C:\opt\llama.cpp\openwebui:/app/backend/data
+    restart: unless-stopped
