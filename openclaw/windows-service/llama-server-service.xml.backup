@@ -1,0 +1,9 @@
+<service>
+  <id>llama-server</id>
+  <name>Llama.cpp Server</name>
+  <description>Llama.cpp API server for OpenClaw</description>
+  <executable>C:\dev\ai\llama.cpp\build\bin\Release\llama-server.exe</executable>
+  <arguments>-m "C:\dev\ai\models\Qwen3-Coder-Next-Q6_K\bartowski_Qwen_Qwen3-Coder-Next-GGUF_Qwen_Qwen3-Coder-Next-Q6_K_Qwen_Qwen3-Coder-Next-Q6_K-00001-of-00002.gguf" -c 32768 --port 8080 -ngl -1 --host 0.0.0.0</arguments>
+  <log mode="roll"></log>
+  <onfailure action="restart" delay="10 sec"/>
+</service>

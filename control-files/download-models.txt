@@ -1,0 +1,10 @@
+ollama run hf.co/TheDrummer/Moistral-11B-v3-GGUF:F16
+
+
+# Start a local OpenAI-compatible server with a web UI:
+llama-server -hf TheDrummer/Moistral-11B-v3-GGUF:F16
+
+C:\dev\ai
+
+
+llama-server --hf-repo TheDrummer/Moistral-11B-v3-GGUF --hf-file Moistral-11B-v3-f16.gguf -m Moistral-11B-v3-f16.gguf

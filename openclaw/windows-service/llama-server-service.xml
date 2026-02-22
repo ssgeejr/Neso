@@ -1,0 +1,9 @@
+<service>
+  <id>llama-server</id>
+  <name>Llama.cpp Server</name>
+  <description>Llama.cpp API server - Qwen3-Coder-Next Q6_K (OpenClaw Primary)</description>
+  <executable>C:\dev\ai\llama.cpp\build\bin\Release\llama-server.exe</executable>
+  <arguments>-m "C:\dev\ai\models\Qwen3-Coder-Next-Q6_K\qwen3-coder-next-q6k-00001-of-00002.gguf" -c 131072 --port 8080 -ngl -1 --host 0.0.0.0 --flash-attn on -sm row --no-mmap --threads 16</arguments>
+  <log mode="roll"></log>
+  <onfailure action="restart" delay="10 sec"/>
+</service>
